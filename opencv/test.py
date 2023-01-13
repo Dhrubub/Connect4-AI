@@ -1,9 +1,9 @@
 import unittest
 from test_boards import *
-from board import Board
+from board import Board, Piece
 
 
-class TestBoard(unittest.TestCase):
+class TestWinConditions(unittest.TestCase):
     def test_horizontally_x(self):
         board = Board(board=horizontally_x)
         self.assertEqual(board.check_winner(), 1)
@@ -47,6 +47,79 @@ class TestBoard(unittest.TestCase):
     def test_unfinished_game_no_winner(self):
         board = Board(board=partial_no_winner)
         self.assertEqual(board.check_winner(), -1)
+
+
+class TestMoves(unittest.TestCase):
+    def test_diagonal_x(self):
+        board = Board()
+        board.reset_board()
+
+        board.move(Piece.x, 0)
+        board.move(Piece.o, 1)
+
+        board.move(Piece.x, 0)
+        board.move(Piece.o, 2)
+
+        board.move(Piece.x, 0)
+        board.move(Piece.o, 0)
+
+        board.move(Piece.x, 3)
+        board.move(Piece.o, 1)
+
+        board.move(Piece.x, 1)
+        board.move(Piece.o, 6)
+
+        board.move(Piece.x, 4)
+        board.move(Piece.o, 6)
+
+        board.move(Piece.x, 0)
+        board.move(Piece.o, 2)
+
+        board.move(Piece.x, 1)
+        board.move(Piece.o, 5)
+
+        board.move(Piece.x, 3)
+        board.move(Piece.o, 6)
+
+        board.move(Piece.x, 2)
+
+        self.assertEqual(board.check_winner(silence=True), 1)
+
+    def test_diagonal_o(self):
+        board = Board()
+        board.reset_board()
+
+        board.move(Piece.x, 0)
+        board.move(Piece.o, 1)
+
+        board.move(Piece.x, 0)
+        board.move(Piece.o, 2)
+
+        board.move(Piece.x, 0)
+        board.move(Piece.o, 0)
+
+        board.move(Piece.x, 3)
+        board.move(Piece.o, 1)
+
+        board.move(Piece.x, 1)
+        board.move(Piece.o, 6)
+
+        board.move(Piece.x, 4)
+        board.move(Piece.o, 6)
+
+        board.move(Piece.x, 0)
+        board.move(Piece.o, 2)
+
+        board.move(Piece.x, 1)
+        board.move(Piece.o, 5)
+
+        board.move(Piece.x, 3)
+        board.move(Piece.o, 6)
+
+        board.move(Piece.x, 5)
+        board.move(Piece.o, 6)
+
+        self.assertEqual(board.check_winner(silence=True), 2)
 
 
 if __name__ == "__main__":
