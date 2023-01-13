@@ -2,13 +2,16 @@ from enum import Enum
 from typing import Literal
 import numpy as np
 
-empty_board: "list[list[str]]" = [["." for _ in range(7)] for _ in range(6)]
-
 
 class Piece(Enum):
-    x: str = "x"
-    o: str = "o"
-    empty: str = "."
+    x: str = "X"
+    o: str = "O"
+    empty: str = " "
+
+
+empty_board: "list[list[str]]" = [
+    [Piece.empty.value for _ in range(7)] for _ in range(6)
+]
 
 
 class Board:
@@ -76,24 +79,26 @@ class Board:
         elif s == self.player2.value * 4:
             self.winner = 2
 
-    def check_winner(self, silence=False) -> int:
+    def check_winner(self, show_winner=True, draw_board=True) -> int:
         self.validate_horizontal()
         self.validate_vertical()
         self.validate_diagonal_down()
         self.validate_diagonal_up()
 
-        if self.winner != -1 and not silence:
-            self.game_over()
+        if self.winner != -1:
+            self.game_over(show_winner, draw_board)
 
         return self.winner
 
-    def game_over(self) -> None:
+    def game_over(self, show_winner=True, draw_board=True) -> None:
         piece: str = self.player1 if self.winner == 1 else self.player2
-        self.draw_board()
-        print(f"The winner is player {self.winner} who had piece {piece.value}.")
+        if draw_board:
+            self.draw_board()
+        if show_winner:
+            print(f"The winner is player {self.winner} who had piece {piece.value}.")
 
     def reset_board(self):
-        self.board = [["." for _ in range(7)] for _ in range(6)]
+        self.board = [[Piece.empty.value for _ in range(7)] for _ in range(6)]
 
     def draw_board(self) -> None:
         print("-" * 29)
